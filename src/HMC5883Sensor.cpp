@@ -19,14 +19,38 @@ void loop() {
     int z = Wire.read() << 8 | Wire.read();
     int y = Wire.read() << 8 | Wire.read();
 
-    // Do something with the x, y, and z values
+    // Calculate heading in degrees
+    float heading = atan2(y, x) * 180.0 / PI;
+
+    // Adjust for negative heading values
+    if (heading < 0) {
+      heading += 360.0;
+    }
+
+    // Determine cardinal direction
+    String direction;
+    if (heading >= 45.0 && heading < 135.0) {
+      direction = "E"; // East
+    } else if (heading >= 135.0 && heading < 225.0) {
+      direction = "S"; // South
+    } else if (heading >= 225.0 && heading < 315.0) {
+      direction = "W"; // West
+    } else {
+      direction = "N"; // North
+    }
+
+    // Print results
     Serial.print("X: ");
     Serial.print(x);
     Serial.print(" Y: ");
     Serial.print(y);
     Serial.print(" Z: ");
-    Serial.println(z);
+    Serial.print(z);
+    Serial.print(" Heading: ");
+    Serial.print(heading);
+    Serial.print(" Direction: ");
+    Serial.println(direction);
   }
 
-  delay(2000); // Delay for 1 second before reading again
+  delay(1000); // Delay for 1 second before reading again
 }
